@@ -28,6 +28,7 @@ import android.widget.Button;
 class WifiDialog extends AlertDialog implements WifiConfigUiBase {
     static final int BUTTON_SUBMIT = DialogInterface.BUTTON_POSITIVE;
     static final int BUTTON_FORGET = DialogInterface.BUTTON_NEUTRAL;
+	static final int BUTTON_FORGET_ALL = DialogInterface.BUTTON_NEUTRAL;
 
     private final boolean mEdit;
     private final DialogInterface.OnClickListener mListener;
@@ -86,6 +87,7 @@ class WifiDialog extends AlertDialog implements WifiConfigUiBase {
     @Override
     public void setForgetButton(CharSequence text) {
         setButton(BUTTON_FORGET, text, mListener);
+		setButton(BUTTON_FORGET_ALL, text, mListener);
     }
 
     @Override

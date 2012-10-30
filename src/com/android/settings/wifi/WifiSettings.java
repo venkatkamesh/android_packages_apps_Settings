@@ -89,6 +89,7 @@ public class WifiSettings extends SettingsPreferenceFragment
     private static final int MENU_ID_CONNECT = Menu.FIRST + 3;
     private static final int MENU_ID_FORGET = Menu.FIRST + 4;
     private static final int MENU_ID_MODIFY = Menu.FIRST + 5;
+	private static final int MENU_ID_FORGET_ALL = Menu.FIRST + 6;
 
     private static final int WIFI_DIALOG_ID = 1;
 
@@ -343,6 +344,7 @@ public class WifiSettings extends SettingsPreferenceFragment
                 if (mSelectedAccessPoint.networkId != INVALID_NETWORK_ID) {
                     menu.add(Menu.NONE, MENU_ID_FORGET, 0, R.string.wifi_menu_forget);
                     menu.add(Menu.NONE, MENU_ID_MODIFY, 0, R.string.wifi_menu_modify);
+					menu.add(Menu.NONE, MENU_ID_FORGET_ALL, 0, R.string.wifi_menu_forget_all);
                 }
             }
         }
@@ -376,6 +378,10 @@ public class WifiSettings extends SettingsPreferenceFragment
                 showConfigUi(mSelectedAccessPoint, true);
                 return true;
             }
+			case MENU_ID_FORGET_ALL:
+				 forget_all();
+				 return true;
+			}	 
         }
         return super.onContextItemSelected(item);
     }
@@ -753,7 +759,9 @@ public class WifiSettings extends SettingsPreferenceFragment
                 forget();
             } else if (button == WifiDialog.BUTTON_SUBMIT) {
                 ((WifiSettingsForSetupWizardXL)getActivity()).onConnectButtonPressed();
-            }
+            } else if (button == WifiDialog.BUTTON_FORGET_ALL && mSelected != null) {
+				forget_all();
+			}
         } else {
             if (button == WifiDialog.BUTTON_FORGET && mSelectedAccessPoint != null) {
                 forget();
@@ -820,6 +828,18 @@ public class WifiSettings extends SettingsPreferenceFragment
         // We need to rename/replace "Next" button in wifi setup context.
         changeNextButtonState(false);
     }
+
+	/*package */ void forget_all9() {
+		 List<WifiConfiguration> configs = mWifiManager.getConfiguredNetworks();
+        if (configs != null) {
+            for (int i=0; i<configs.size(); i++) {
+                mWifiManager.removeNetwork(i);
+            }
+            saveNetworks();
+        }
+    }
+	
+	
 
     /**
      * Refreshes acccess points and ask Wifi module to scan networks again.
